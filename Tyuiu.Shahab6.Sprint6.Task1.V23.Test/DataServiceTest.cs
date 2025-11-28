@@ -1,10 +1,5 @@
-﻿using Tyuiu.Shahab6.Sprint6.Task1.V23.Lib;
-internal class Program
-{
-    private static void Main(string[] args)
-    {
-}
-}
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tyuiu.Shahab6.Sprint6.Task1.V23.Lib;
 
 namespace Tyuiu.Shahab6.Sprint6.Task1.V23.Test
 {
@@ -28,4 +23,5 @@ namespace Tyuiu.Shahab6.Sprint6.Task1.V23.Test
             CollectionAssert.AreEqual(wait, res);
         }
     }
+}
 }
