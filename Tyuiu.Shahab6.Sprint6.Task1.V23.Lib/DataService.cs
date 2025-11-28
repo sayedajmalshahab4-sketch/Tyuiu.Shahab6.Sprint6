@@ -3,8 +3,13 @@ using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task1.V23.Lib
 {
-    public class DataService : ISprint6Task1V23
+    public class DataService : ISprint6Task0V23
     {
+        public double Calculate(int x)
+        {
+            throw new NotImplementedException();
+        }
+
         public double[] GetMassFunction(int startValue, int stopValue)
         {
             int length = stopValue - startValue + 1;
