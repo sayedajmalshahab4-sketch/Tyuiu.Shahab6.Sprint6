@@ -6,7 +6,7 @@ using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
 {
-    public class DataService : ISprint6Task4V23
+    public class DataService : ISprint6Task5V23
     {
         public List<double> LoadFromDataFile(string path)
         {
@@ -50,6 +50,11 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
         }
 
         public double[] GetMassFunction(int startValue, int stopValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        double[] ISprint6Task5V23.LoadFromDataFile(string path)
         {
             throw new NotImplementedException();
         }
