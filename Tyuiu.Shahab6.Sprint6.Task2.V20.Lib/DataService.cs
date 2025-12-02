@@ -1,9 +1,14 @@
 ﻿using System;
+using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task2.V20.Lib
 {
-    public class DataService
+    public class DataService : ISprint6Task2V20
     {
+        public DataService()
+        {
+        }
+
         public double[] GetMassFunction(int startValue, int stopValue)
         {
             int length = stopValue - startValue + 1;
