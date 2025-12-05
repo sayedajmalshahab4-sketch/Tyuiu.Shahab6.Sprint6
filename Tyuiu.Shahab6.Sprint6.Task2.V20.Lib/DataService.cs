@@ -1,7 +1,7 @@
 ﻿using System;
 using tyuiu.cources.programming.interfaces.Sprint6;
 
-namespace Tyuiu.Shahab6.Sprint6.Task2.V20.Lib
+namespace Tyuiu.Shahab6.Sprint6.Task1.V23.Lib
 {
     public class DataService : ISprint6Task2V20
     {
@@ -11,29 +11,33 @@ namespace Tyuiu.Shahab6.Sprint6.Task2.V20.Lib
 
         public double[] GetMassFunction(int startValue, int stopValue)
         {
-            int length = stopValue - startValue + 1;
-            double[] valueArray = new double[length];
+            int len = stopValue - startValue + 1;
+            double[] valueArray = new double[len];
 
             int count = 0;
             for (int x = startValue; x <= stopValue; x++)
             {
-                double denominator = x + 1.2;
+                // Вычисляем значение функции: F(x) = sin(x) + (2x/3) - cos(x) * 4x
+                // Проверка деления на ноль - в данном случае нет деления, но оставляем шаблон
+                double denominator = 3; // знаменатель для 2x/3
 
-                // Проверка деления на ноль
                 if (Math.Abs(denominator) < 0.0001)
                 {
                     valueArray[count] = 0;
                 }
                 else
                 {
-                    // F(x) = sin(x)/(x+1.2) - sin(x)*2 - 2x
-                    double term1 = Math.Sin(x) / denominator;
-                    double term2 = Math.Sin(x) * 2;
-                    double term3 = 2 * x;
+                    double sinX = Math.Sin(x);
+                    double term1 = sinX;
+                    double term2 = (2 * x) / denominator; // 2x/3
+                    double term3 = Math.Cos(x) * 4 * x; // cos(x) * 4x
 
-                    double result = term1 - term2 - term3;
-                    valueArray[count] = Math.Round(result, 2);
+                    double y = term1 + term2 - term3;
+
+                    // Округление до двух знаков после запятой
+                    valueArray[count] = Math.Round(y, 2);
                 }
+
                 count++;
             }
 

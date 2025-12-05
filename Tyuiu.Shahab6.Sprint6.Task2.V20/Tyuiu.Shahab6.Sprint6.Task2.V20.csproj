@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13DD168F-1523-4020-B637-F389FA6BAF59}</ProjectGuid>
+    <ProjectGuid>{C54EF68B-7DB5-4AB5-AE2C-CD0A0E0A4987}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Tyuiu.Shahab6.Sprint6.Task2.V20</RootNamespace>
     <AssemblyName>Tyuiu.Shahab6.Sprint6.Task2.V20</AssemblyName>
@@ -44,9 +44,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="tyuiu.cources.programming.interfaces">
-      <HintPath>..\tyuiu.cources.programming.interfaces.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormMain.cs">
@@ -83,7 +80,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <ProjectReference Include="..\Tyuiu.Shahab6.Sprint6.Task2.V20.Lib\Tyuiu.Shahab6.Sprint6.Task2.V20.Lib.csproj">
+      <Project>{b8148b4e-715a-48b6-a27a-5b1ef071695b}</Project>
+      <Name>Tyuiu.Shahab6.Sprint6.Task2.V20.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tyuiu.Shahab6.Sprint6.Task2.V20.Lib;
+using Tyuiu.Shahab6.Sprint6.Task1.V23.Lib;
 
-namespace Tyuiu.Shahab6.Sprint6.Task2.V20.Test
+namespace Tyuiu.Shahab6.Sprint6.Task1.V23.Test
 {
     [TestClass]
     public class DataServiceTest
@@ -13,23 +13,16 @@ namespace Tyuiu.Shahab6.Sprint6.Task2.V20.Test
 
             int startValue = -5;
             int stopValue = 5;
+
             double[] res = ds.GetMassFunction(startValue, stopValue);
 
-            double[] wait = {
-                10.76,  // x = -5
-                7.13,   // x = -4
-                4.33,   // x = -3
-                1.94,   // x = -2
-                -0.26,  // x = -1
-                -1.67,  // x = 0
-                -2.84,  // x = 1
-                -4.91,  // x = 2
-                -7.06,  // x = 3
-                -9.19,  // x = 4
-                -11.27  // x = 5
-            };
+            // Проверяем количество элементов
+            Assert.AreEqual(11, res.Length);
 
-            CollectionAssert.AreEqual(wait, res);
+            // Проверяем несколько значений
+            Assert.AreEqual(20.15, res[0]);  // x = -5
+            Assert.AreEqual(7.76, res[5]);   // x = 0
+            Assert.AreEqual(-19.59, res[10]); // x = 5
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace Tyuiu.Shahab6.Sprint6.Task2.V20
+﻿namespace Tyuiu.Shahab6.Sprint6.Task1.V23
 {
     partial class FormMain
     {
-        private const string V = "Form1";
-
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -34,21 +30,16 @@ namespace Tyuiu.Shahab6.Sprint6.Task2.V20
         {
             this.SuspendLayout();
             // 
-            // FormMain
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "FormMain";
-            this.Text = V;
-            this.Load += new System.EventHandler(this.FormMain_Load);
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion
