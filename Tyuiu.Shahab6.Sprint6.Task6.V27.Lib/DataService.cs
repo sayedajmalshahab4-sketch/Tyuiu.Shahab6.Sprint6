@@ -1,49 +1,52 @@
-﻿ using System.Text.RegularExpressions;
-using tyuiu.cources.programming.interfaces.Sprint6;
+﻿using System;
+using System.IO;
+using System.Text;
 
 namespace Tyuiu.Shahab6.Sprint6.Task6.V27.Lib
 {
-    public class DataService : ISprint6Task6V27
+    public class DataService
     {
-        public DataService()
-        {
-        }
-
         public string CollectTextFromFile(string path)
         {
-            string result = "";
+            StringBuilder result = new StringBuilder();
 
             try
             {
                 string fileContent = File.ReadAllText(path);
 
-                // Разделяем на слова (учитываем пробелы, знаки препинания)
-                string[] words = Regex.Split(fileContent, @"\W+");
+                char[] separators = new char[] {
+                    ' ', '.', ',', '!', '?', ';', ':',
+                    '\t', '\n', '\r', '"', '(', ')',
+                    '[', ']', '{', '}', '<', '>',
+                    '/', '\\', '-', '+', '=', '*',
+                    '&', '^', '%', '$', '#', '@',
+                    '|', '~', '`'
+                };
+
+                string[] words = fileContent.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (string word in words)
                 {
-                    if (!string.IsNullOrEmpty(word))
+                    
+                    if (word.Contains('H'))
                     {
-                        // Проверяем, содержит ли слово букву 'H' (регистр не важен)
-                        if (word.IndexOf("H", StringComparison.OrdinalIgnoreCase) >= 0)
-                        {
-                            result += word + " ";
-                        }
+                        result.Append(word);
+                        result.Append(" ");
                     }
                 }
 
-                // Убираем последний пробел
+                
                 if (result.Length > 0)
                 {
-                    result = result.Trim();
+                    result.Length--;
                 }
             }
             catch (Exception ex)
             {
-                result = "Ошибка: " + ex.Message;
+                throw new Exception($"Ошибка при обработке файла: {ex.Message}");
             }
 
-            return result;
+            return result.ToString();
         }
     }
 }
