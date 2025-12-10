@@ -1,9 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tyuiu.Shahab6.Sprint6.Task6.V27.Lib;
-using System.IO;
-
-namespace Tyuiu.Shahab6.Sprint6.Task6.V27.Test
-{
+﻿
  using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;

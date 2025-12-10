@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿ using System.Text.RegularExpressions;
 using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task6.V27.Lib
