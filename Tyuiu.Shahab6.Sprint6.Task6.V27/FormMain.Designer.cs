@@ -1,4 +1,4 @@
-﻿namespace Tyuiu.Shahab6.Sprint6.Task1.V23
+﻿namespace Tyuiu.Shahab6.Sprint6.Task6.V27
 {
     partial class FormMain
     {
