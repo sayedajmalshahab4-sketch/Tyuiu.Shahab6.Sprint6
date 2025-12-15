@@ -1,10 +1,15 @@
 ﻿using System;
 using System.IO;
+using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
 {
-    public class DataService
+    public class DataService : ISprint6Task7V4
     {
+        public DataService()
+        {
+        }
+
         public int[,] GetMatrix(string path)
         {
             string[] lines = File.ReadAllLines(path);
