@@ -1,84 +1,42 @@
 ﻿using System;
 using System.IO;
-using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
 {
-    public class DataService : ISprint6Task7V4
+    public class DataService
     {
-        public DataService()
-        {
-        }
-
         public int[,] GetMatrix(string path)
         {
-            throw new NotImplementedException();
-        }
+            string[] lines = File.ReadAllLines(path);
 
-        public int[,] LoadMatrixFromFile(string filePath)
-        {
-            try
+            if (lines.Length == 0)
+                return new int[0, 0];
+
+            string[] firstLine = lines[0].Split(',');
+            int rows = lines.Length;
+            int cols = firstLine.Length;
+
+            int[,] matrix = new int[rows, cols];
+
+            for (int i = 0; i < rows; i++)
             {
-                // Читаем все строки файла
-                string[] lines = File.ReadAllLines(filePath);
-
-                if (lines.Length == 0)
+                string[] values = lines[i].Split(',');
+                for (int j = 0; j < cols; j++)
                 {
-                    throw new ArgumentException("Файл пуст");
+                    matrix[i, j] = Convert.ToInt32(values[j]);
                 }
-
-                // Определяем размеры матрицы
-                int rows = lines.Length;
-                string[] firstLine = lines[0].Split(',');
-                int cols = firstLine.Length;
-
-                int[,] matrix = new int[rows, cols];
-
-                // Заполняем матрицу
-                for (int i = 0; i < rows; i++)
-                {
-                    string[] values = lines[i].Split(',');
-
-                    if (values.Length != cols)
-                    {
-                        throw new ArgumentException($"Несовпадающее количество столбцов в строке {i + 1}");
-                    }
-
-                    for (int j = 0; j < cols; j++)
-                    {
-                        if (int.TryParse(values[j], out int value))
-                        {
-                            matrix[i, j] = value;
-                        }
-                        else
-                        {
-                            throw new ArgumentException($"Неверный формат данных в строке {i + 1}, столбце {j + 1}");
-                        }
-                    }
-                }
-
-                return matrix;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("Ошибка при загрузке матрицы из файла: " + ex.Message);
-            }
+
+            return matrix;
         }
 
         public int[,] ProcessMatrix(int[,] matrix)
         {
-            if (matrix == null)
-            {
-                throw new ArgumentNullException(nameof(matrix), "Матрица не может быть null");
-            }
-
             int rows = matrix.GetLength(0);
             int cols = matrix.GetLength(1);
 
-            // Создаем копию матрицы
             int[,] result = (int[,])matrix.Clone();
 
-            // Обрабатываем вторую строку (индекс 1)
             if (rows >= 2)
             {
                 for (int j = 0; j < cols; j++)
@@ -93,37 +51,23 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
             return result;
         }
 
-        public string SaveMatrixToFile(int[,] matrix, string filePath)
+        public void SaveMatrixToFile(int[,] matrix, string path)
         {
-            try
+            int rows = matrix.GetLength(0);
+            int cols = matrix.GetLength(1);
+
+            using (StreamWriter writer = new StreamWriter(path))
             {
-                using (StreamWriter writer = new StreamWriter(filePath))
+                for (int i = 0; i < rows; i++)
                 {
-                    int rows = matrix.GetLength(0);
-                    int cols = matrix.GetLength(1);
-
-                    for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < cols; j++)
                     {
-                        for (int j = 0; j < cols; j++)
-                        {
-                            writer.Write(matrix[i, j]);
-                            if (j < cols - 1)
-                            {
-                                writer.Write(",");
-                            }
-                        }
-                        if (i < rows - 1)
-                        {
-                            writer.WriteLine();
-                        }
+                        writer.Write(matrix[i, j]);
+                        if (j < cols - 1)
+                            writer.Write(",");
                     }
+                    writer.WriteLine();
                 }
-
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Ошибка при сохранении матрицы в файл: " + ex.Message);
             }
         }
     }

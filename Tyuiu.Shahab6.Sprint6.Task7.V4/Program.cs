@@ -16,7 +16,7 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FromMain());
+            Application.Run(new Form1());
         }
     }
 }
