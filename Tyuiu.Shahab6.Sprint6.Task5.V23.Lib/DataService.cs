@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using tyuiu.cources.programming.interfaces.Sprint6;
+﻿using tyuiu.cources.programming.interfaces.Sprint6;
 
 namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
 {
     public class DataService : ISprint6Task5V23
     {
-        public List<double> LoadFromDataFile(string path)
+        public double[] LoadFromDataFile(string path)
         {
             List<double> numbers = new List<double>();
 
@@ -21,7 +17,10 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
                     {
                         if (double.TryParse(line, out double number))
                         {
-                            numbers.Add(Math.Round(number, 3));
+                            if (number < 0) 
+                            {
+                                numbers.Add(Math.Round(number, 3));
+                            }
                         }
                     }
                 }
@@ -31,9 +30,10 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
                 throw new Exception($"Ошибка чтения файла: {ex.Message}");
             }
 
-            return numbers;
+            return numbers.ToArray(); 
         }
 
+        
         public List<double> GetNegativeNumbers(List<double> numbers)
         {
             return numbers.Where(n => n < 0).ToList();
@@ -50,11 +50,6 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
         }
 
         public double[] GetMassFunction(int startValue, int stopValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        double[] ISprint6Task5V23.LoadFromDataFile(string path)
         {
             throw new NotImplementedException();
         }
