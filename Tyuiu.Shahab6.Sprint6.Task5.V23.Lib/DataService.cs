@@ -1,8 +1,7 @@
 ﻿using tyuiu.cources.programming.interfaces.Sprint6;
-
-namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
+namespace Tyuiu.Shahab.Sprint6.Task5.V23.Lib
 {
-    public class DataService : ISprint6Task5V23
+    public class DataService :ISprint6Task5V23
     {
         public DataService()
         {
@@ -10,52 +9,24 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
 
         public double[] LoadFromDataFile(string path)
         {
-            List<double> numbers = new List<double>();
+            List<double> result = new List<double>();
 
-            try
+            using (StreamReader reader = new StreamReader(path))
             {
-                using (StreamReader reader = new StreamReader(path))
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
+                    if (double.TryParse(line.Replace('.', ','), out double num))
                     {
-                        if (double.TryParse(line, out double number))
+                        if (num < 0)
                         {
-                            if (number < 0) 
-                            {
-                                numbers.Add(Math.Round(number, 3));
-                            }
+                            result.Add(Math.Round(num, 3));
                         }
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка чтения файла: {ex.Message}");
-            }
 
-            return numbers.ToArray(); 
-        }
-
-        
-        public List<double> GetNegativeNumbers(List<double> numbers)
-        {
-            return numbers.Where(n => n < 0).ToList();
-        }
-
-        public int CountNegativeNumbers(List<double> numbers)
-        {
-            return numbers.Count(n => n < 0);
-        }
-
-        public int CountPositiveNumbers(List<double> numbers)
-        {
-            return numbers.Count(n => n >= 0);
-        }
-
-        public double[] GetMassFunction(int startValue, int stopValue)
-        {
-            throw new NotImplementedException();
+            return result.ToArray();
         }
     }
 }

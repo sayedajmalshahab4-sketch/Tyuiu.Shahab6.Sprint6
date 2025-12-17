@@ -27,25 +27,25 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23
                 {
                     DataService ds = new DataService();
 
-                    // Загрузка данных из файла
+                    
                     List<double> allNumbers = ds.LoadFromDataFile(openFileDialog.FileName);
 
-                    // Отображение всех чисел в dataGridView
+                    
                     DisplayAllNumbers(dataGridViewAll, allNumbers, "Все числа из файла");
 
-                    // Получение отрицательных чисел
+                    
                     List<double> negativeNumbers = ds.GetNegativeNumbers(allNumbers);
 
-                    // Отображение отрицательных чисел
+                    
                     DisplayNegativeNumbers(dataGridViewNegative, negativeNumbers, "Отрицательные числа (< 0)");
 
-                    // Построение диаграммы
+                    
                     DrawChart(chartNumbers, allNumbers, negativeNumbers);
 
-                    // Статистика
+                    
                     DisplayStatistics(allNumbers, ds);
 
-                    // Сохранение пути к файлу
+                    
                     textBoxFilePath.Text = openFileDialog.FileName;
                 }
                 catch (Exception ex)
