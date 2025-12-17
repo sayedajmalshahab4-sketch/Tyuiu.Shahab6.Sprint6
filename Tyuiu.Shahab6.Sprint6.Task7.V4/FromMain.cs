@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
-
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4
 {
     public partial class FormMain : Form
@@ -10,6 +8,8 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4
         private int[,] inputMatrix;
         private int[,] outputMatrix;
         private string inputFilePath;
+        private object saveFileDialog;
+        private readonly object buttonSaveResult;
 
         public FormMain()
         {
@@ -56,6 +56,7 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4
             for (int j = 0; j < cols; j++)
             {
                 dgv.Columns.Add("col" + j, "Col " + (j + 1));
+                dgv.Columns[j].Width = 70;
             }
 
             for (int i = 0; i < rows; i++)
@@ -96,5 +97,14 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4
             MessageBox.Show("Task 7 Variant 4", "Help",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+    }
+
+    internal class openFileDialog
+    {
+        public static string Title { get; internal set; }
+    }
+
+    internal class DataService
+    {
     }
 }

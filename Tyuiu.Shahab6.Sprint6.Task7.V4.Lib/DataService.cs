@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint6;
-
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
 {
     public class DataService : ISprint6Task7V4
@@ -17,7 +16,9 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
             if (lines.Length == 0)
                 return new int[0, 0];
 
-            string[] firstLine = lines[0].Split(',');
+            char separator = lines[0].Contains(';') ? ';' : ',';
+            string[] firstLine = lines[0].Split(separator);
+
             int rows = lines.Length;
             int cols = firstLine.Length;
 
@@ -25,10 +26,10 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
 
             for (int i = 0; i < rows; i++)
             {
-                string[] values = lines[i].Split(',');
+                string[] values = lines[i].Split(separator);
                 for (int j = 0; j < cols; j++)
                 {
-                    matrix[i, j] = Convert.ToInt32(values[j]);
+                    matrix[i, j] = Convert.ToInt32(values[j].Trim());
                 }
             }
 
@@ -69,7 +70,7 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
                     {
                         writer.Write(matrix[i, j]);
                         if (j < cols - 1)
-                            writer.Write(",");
+                            writer.Write(";");
                     }
                     writer.WriteLine();
                 }

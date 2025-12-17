@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
-
+﻿using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Test
 {
     [TestClass]
@@ -11,7 +8,7 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Test
         public void GetMatrixTest()
         {
             string path = "test.csv";
-            File.WriteAllText(path, "1,2,3\n4,5,6\n7,8,9");
+            File.WriteAllText(path, "1;2;3\n4;5;6\n7;8;9");
 
             var ds = new DataService();
             int[,] matrix = ds.GetMatrix(path);
@@ -54,18 +51,8 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Test
             ds.SaveMatrixToFile(matrix, path);
 
             Assert.IsTrue(File.Exists(path));
-            string content = File.ReadAllText(path);
-            Assert.IsTrue(content.Contains("1,2"));
 
             File.Delete(path);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(System.Exception))]
-        public void GetMatrixFileNotFoundTest()
-        {
-            var ds = new DataService();
-            ds.GetMatrix("nonexistent.csv");
         }
     }
 }

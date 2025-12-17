@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Tyuiu.Shahab6.Sprint6.Task1.V23.Lib; // Исправлено: Tyuiu, а не Tyulu
-
-namespace Tyuiu.Shahab6.Sprint6.Task1.V23 // Исправлено: Tyuiu, а не Tyulu
-{
+using Tyuiu.Shahab6.Sprint6.Task1.V23.Lib;
+namespace Tyuiu.Shahab6.Sprint6.Task1.V23 
     public partial class FormMain : Form
     {
         public FormMain()
@@ -13,8 +11,7 @@ namespace Tyuiu.Shahab6.Sprint6.Task1.V23 // Исправлено: Tyuiu, а н�
 
         private void buttonDone_SHA_Click(object sender, EventArgs e)
         {
-            DataService ds = new DataService(); // Исправлено: DataService, а не Dataservice
-
+            DataService ds = new DataService();
             try
             {
                 int startValue = Convert.ToInt32(textBoxStart_SHA.Text);
