@@ -4,6 +4,10 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23.Lib
 {
     public class DataService : ISprint6Task5V23
     {
+        public DataService()
+        {
+        }
+
         public double[] LoadFromDataFile(string path)
         {
             List<double> numbers = new List<double>();
