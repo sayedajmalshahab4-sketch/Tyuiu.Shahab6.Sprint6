@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization.Charting;
-using Tyuiu.Shahab6.Sprint6.Task5.V23.Lib;
 
-namespace Tyuiu.Shahab6.Sprint6.Task5.V23
+namespace YourNamespace
 {
     public partial class FormMain : Form
     {
@@ -15,162 +11,143 @@ namespace Tyuiu.Shahab6.Sprint6.Task5.V23
             InitializeComponent();
         }
 
-        private void buttonOpenFile_Click(object sender, EventArgs e)
+        private void buttonLoad_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog.FileName = "InPutFileTask5V23.txt";
+            openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    DataService ds = new DataService();
+                    string[,] matrix = LoadCSV(openFileDialog.FileName);
+                    DisplayMatrixInDataGridView(matrix, dataGridViewIn);
 
-                    
-                    List<double> allNumbers = ds.LoadFromDataFile(openFileDialog.FileName);
+                    string[,] processedMatrix = ProcessMatrix(matrix);
+                    DisplayMatrixInDataGridView(processedMatrix, dataGridViewOut);
 
-                    
-                    DisplayAllNumbers(dataGridViewAll, allNumbers, "Все числа из файла");
-
-                    
-                    List<double> negativeNumbers = ds.GetNegativeNumbers(allNumbers);
-
-                    
-                    DisplayNegativeNumbers(dataGridViewNegative, negativeNumbers, "Отрицательные числа (< 0)");
-
-                    
-                    DrawChart(chartNumbers, allNumbers, negativeNumbers);
-
-                    
-                    DisplayStatistics(allNumbers, ds);
-
-                    
-                    textBoxFilePath.Text = openFileDialog.FileName;
+                    MessageBox.Show("File loaded successfully", "Success",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка загрузки файла: {ex.Message}", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error loading file: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void DisplayAllNumbers(DataGridView dgv, List<double> numbers, string title)
+        private void buttonSave_Click(object sender, EventArgs e)
         {
-            dgv.Rows.Clear();
-            dgv.Columns.Clear();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.FileName = "OutPutFileTask7.csv";
 
-            // Создаем колонки
-            dgv.Columns.Add("colIndex", "№");
-            dgv.Columns.Add("colValue", "Значение");
-
-            dgv.Columns[0].Width = 50;
-            dgv.Columns[1].Width = 100;
-
-            // Заполняем данными
-            for (int i = 0; i < numbers.Count; i++)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                dgv.Rows.Add(i + 1, numbers[i].ToString("F3"));
-
-                // Подсветка отрицательных чисел
-                if (numbers[i] < 0)
+                try
                 {
-                    dgv.Rows[i].Cells[1].Style.BackColor = Color.LightCoral;
+                    SaveMatrixToCSV(dataGridViewOut, saveFileDialog.FileName);
+                    MessageBox.Show("File saved successfully", "Success",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
-
-            dgv.ClearSelection();
-        }
-
-        private void DisplayNegativeNumbers(DataGridView dgv, List<double> numbers, string title)
-        {
-            dgv.Rows.Clear();
-            dgv.Columns.Clear();
-
-            // Создаем колонки
-            dgv.Columns.Add("colIndex", "№");
-            dgv.Columns.Add("colValue", "Отрицательное значение");
-
-            dgv.Columns[0].Width = 50;
-            dgv.Columns[1].Width = 150;
-
-            // Заполняем данными
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                dgv.Rows.Add(i + 1, numbers[i].ToString("F3"));
-                dgv.Rows[i].Cells[1].Style.BackColor = Color.LightCoral;
-            }
-
-            dgv.ClearSelection();
-        }
-
-        private void DrawChart(Chart chart, List<double> allNumbers, List<double> negativeNumbers)
-        {
-            chart.Series.Clear();
-            chart.ChartAreas.Clear();
-
-            // Настройка области графика
-            ChartArea chartArea = new ChartArea();
-            chartArea.AxisX.Title = "Номер элемента";
-            chartArea.AxisY.Title = "Значение";
-            chartArea.AxisX.MajorGrid.Enabled = true;
-            chartArea.AxisY.MajorGrid.Enabled = true;
-            chart.ChartAreas.Add(chartArea);
-
-            // Серия для всех чисел
-            Series seriesAll = new Series();
-            seriesAll.ChartType = SeriesChartType.Column;
-            seriesAll.Name = "Все числа";
-            seriesAll.Color = Color.LightBlue;
-            seriesAll.BorderWidth = 1;
-
-            // Серия для отрицательных чисел
-            Series seriesNegative = new Series();
-            seriesNegative.ChartType = SeriesChartType.Column;
-            seriesNegative.Name = "Отрицательные";
-            seriesNegative.Color = Color.Red;
-            seriesNegative.BorderWidth = 1;
-
-            // Добавление точек
-            for (int i = 0; i < allNumbers.Count; i++)
-            {
-                seriesAll.Points.AddXY(i + 1, allNumbers[i]);
-
-                if (allNumbers[i] < 0)
+                catch (Exception ex)
                 {
-                    seriesNegative.Points.AddXY(i + 1, allNumbers[i]);
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private string[,] LoadCSV(string filePath)
+        {
+            string[] lines = File.ReadAllLines(filePath);
+
+            int rowCount = lines.Length;
+            string[] firstLineParts = lines[0].Split(';');
+            int colCount = firstLineParts.Length;
+
+            string[,] matrix = new string[rowCount, colCount];
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                string[] parts = lines[i].Split(';');
+                for (int j = 0; j < colCount; j++)
+                {
+                    matrix[i, j] = parts[j].Trim();
                 }
             }
 
-            chart.Series.Add(seriesAll);
-            chart.Series.Add(seriesNegative);
-
-            // Настройки отображения
-            chart.Titles.Clear();
-            chart.Titles.Add("Диаграмма значений из файла");
-            chart.Legends[0].Enabled = true;
+            return matrix;
         }
 
-        private void DisplayStatistics(List<double> numbers, DataService ds)
+        private string[,] ProcessMatrix(string[,] matrix)
         {
-            int totalCount = numbers.Count;
-            int negativeCount = ds.CountNegativeNumbers(numbers);
-            int positiveCount = ds.CountPositiveNumbers(numbers);
+            int rowCount = matrix.GetLength(0);
+            int colCount = matrix.GetLength(1);
 
-            string stats = $"Общая статистика:\r\n";
-            stats += $"Всего чисел: {totalCount}\r\n";
-            stats += $"Отрицательных чисел: {negativeCount}\r\n";
-            stats += $"Неотрицательных чисел: {positiveCount}\r\n";
-            stats += $"Процент отрицательных: {(double)negativeCount / totalCount * 100:F1}%";
+            string[,] result = new string[rowCount, colCount];
 
-            textBoxStatistics.Text = stats;
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    result[i, j] = matrix[i, j];
+                }
+            }
+
+            for (int j = 0; j < colCount; j++)
+            {
+                if (int.TryParse(result[1, j], out int number))
+                {
+                    if (number % 4 == 0)
+                    {
+                        result[1, j] = "4";
+                    }
+                }
+            }
+
+            return result;
         }
 
-        private void buttonHelp_Click(object sender, EventArgs e)
+        private void DisplayMatrixInDataGridView(string[,] matrix, DataGridView dgv)
         {
-            MessageBox.Show("Таск 5 выполнил студент группы СМАРТб-23-1 Шахаб А. Дж.",
-                "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            int rowCount = matrix.GetLength(0);
+            int colCount = matrix.GetLength(1);
+
+            dgv.RowCount = rowCount;
+            dgv.ColumnCount = colCount;
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    dgv[j, i].Value = matrix[i, j];
+                }
+            }
+        }
+
+        private void SaveMatrixToCSV(DataGridView dgv, string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                for (int i = 0; i < dgv.RowCount; i++)
+                {
+                    string[] rowValues = new string[dgv.ColumnCount];
+                    for (int j = 0; j < dgv.ColumnCount; j++)
+                    {
+                        rowValues[j] = dgv[j, i].Value?.ToString() ?? "";
+                    }
+                    writer.WriteLine(string.Join(";", rowValues));
+                }
+            }
+        }
+
+        private void buttonDone_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
