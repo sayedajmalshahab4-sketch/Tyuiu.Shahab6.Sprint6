@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint6;
+
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
 {
     public class DataService : ISprint6Task7V4
@@ -13,68 +14,29 @@ namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Lib
         {
             string[] lines = File.ReadAllLines(path);
 
-            if (lines.Length == 0)
-                return new int[0, 0];
+            int rowCount = lines.Length;
+            int colCount = lines[0].Split(';').Length;
 
-            char separator = lines[0].Contains(';') ? ';' : ',';
-            string[] firstLine = lines[0].Split(separator);
+            int[,] matrix = new int[rowCount, colCount];
 
-            int rows = lines.Length;
-            int cols = firstLine.Length;
-
-            int[,] matrix = new int[rows, cols];
-
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < rowCount; i++)
             {
-                string[] values = lines[i].Split(separator);
-                for (int j = 0; j < cols; j++)
+                string[] values = lines[i].Split(';');
+                for (int j = 0; j < colCount; j++)
                 {
-                    matrix[i, j] = Convert.ToInt32(values[j].Trim());
+                    matrix[i, j] = int.Parse(values[j].Trim());
+                }
+            }
+
+            for (int j = 0; j < colCount; j++)
+            {
+                if (matrix[1, j] % 4 == 0)
+                {
+                    matrix[1, j] = 4;
                 }
             }
 
             return matrix;
-        }
-
-        public int[,] ProcessMatrix(int[,] matrix)
-        {
-            int rows = matrix.GetLength(0);
-            int cols = matrix.GetLength(1);
-
-            int[,] result = (int[,])matrix.Clone();
-
-            if (rows >= 2)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    if (result[1, j] % 4 == 0 && result[1, j] != 0)
-                    {
-                        result[1, j] = 4;
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        public void SaveMatrixToFile(int[,] matrix, string path)
-        {
-            int rows = matrix.GetLength(0);
-            int cols = matrix.GetLength(1);
-
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                for (int i = 0; i < rows; i++)
-                {
-                    for (int j = 0; j < cols; j++)
-                    {
-                        writer.Write(matrix[i, j]);
-                        if (j < cols - 1)
-                            writer.Write(";");
-                    }
-                    writer.WriteLine();
-                }
-            }
         }
     }
 }

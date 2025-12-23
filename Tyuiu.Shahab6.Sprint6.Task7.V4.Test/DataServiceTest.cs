@@ -1,58 +1,34 @@
-﻿using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
+
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4.Test
 {
     [TestClass]
     public class DataServiceTest
     {
         [TestMethod]
-        public void GetMatrixTest()
+        public void ValidGetMatrix()
         {
-            string path = "test.csv";
-            File.WriteAllText(path, "1;2;3\n4;5;6\n7;8;9");
+            DataService ds = new DataService();
 
-            var ds = new DataService();
-            int[,] matrix = ds.GetMatrix(path);
+            string path = @"C:\DataSprint6\InPutDataFileTask7V4.csv";
 
-            Assert.AreEqual(3, matrix.GetLength(0));
-            Assert.AreEqual(3, matrix.GetLength(1));
-            Assert.AreEqual(1, matrix[0, 0]);
-            Assert.AreEqual(6, matrix[1, 2]);
-
-            File.Delete(path);
-        }
-
-        [TestMethod]
-        public void ProcessMatrixTest()
-        {
-            var ds = new DataService();
-            int[,] matrix = new int[,]
-            {
-                { 1, 2, 3, 4 },
-                { 8, 5, 12, 9 },
-                { 16, 7, 20, 11 }
+            int[,] res = ds.GetMatrix(path);
+            int[,] wait = {
+                {19, 8, -15, 7, 12, 1, 19, 13, -10, -16},
+                {17, 9, 9, 4, 4, 4, 18, -5, -11, 14},
+                {-11, -20, -3, -8, -12, -12, -19, -20, -20, 20},
+                {2, -1, -7, -20, 1, -8, 18, -6, 11, 20},
+                {-5, -15, 6, -11, 7, -18, 8, 7, 11, 19},
+                {-19, -1, -8, 15, -6, 7, -14, 2, 15, -13},
+                {-18, -14, -10, 9, 15, 19, 16, 7, -7, -9},
+                {-11, 18, -2, 11, 0, -20, 12, 15, 15, -2},
+                {-2, -11, -15, 1, 14, 0, 7, 8, -8, 20},
+                {-8, 19, 9, 16, -12, -6, 10, 3, -19, -10}
             };
 
-            int[,] result = ds.ProcessMatrix(matrix);
-
-            Assert.AreEqual(4, result[1, 0]);
-            Assert.AreEqual(4, result[1, 2]);
-            Assert.AreEqual(9, result[1, 3]);
-            Assert.AreEqual(1, result[0, 0]);
-            Assert.AreEqual(16, result[2, 0]);
-        }
-
-        [TestMethod]
-        public void SaveMatrixTest()
-        {
-            var ds = new DataService();
-            int[,] matrix = new int[,] { { 1, 2 }, { 3, 4 } };
-            string path = "test_save.csv";
-
-            ds.SaveMatrixToFile(matrix, path);
-
-            Assert.IsTrue(File.Exists(path));
-
-            File.Delete(path);
+            CollectionAssert.AreEqual(wait, res);
         }
     }
 }

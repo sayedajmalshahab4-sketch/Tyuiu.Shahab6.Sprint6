@@ -1,110 +1,129 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
+using Tyuiu.Shahab6.Sprint6.Task7.V4.Lib;
+
 namespace Tyuiu.Shahab6.Sprint6.Task7.V4
 {
     public partial class FormMain : Form
     {
-        private DataService ds;
-        private int[,] inputMatrix;
-        private int[,] outputMatrix;
-        private string inputFilePath;
-        private object saveFileDialog;
-        private readonly object buttonSaveResult;
-
         public FormMain()
         {
             InitializeComponent();
-            ds = new DataService();
-            buttonSaveResult.Enabled = false;
         }
 
-        private void buttonOpenFile_Click(object sender, EventArgs e)
+        private void buttonLoad_Click(object sender, EventArgs e)
         {
-            try
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-                openFileDialog.FileName = "InPutFileTask7V4.csv";
-                openFileDialog.Title = "Open File";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                try
                 {
-                    inputFilePath = openFileDialog.FileName;
-                    textBoxInputFile.Text = inputFilePath;
+                    DataService ds = new DataService();
+                    int[,] matrix = ds.GetMatrix(openFileDialog.FileName);
 
-                    inputMatrix = ds.GetMatrix(inputFilePath);
-                    DisplayMatrix(dataGridViewIn, inputMatrix);
-                    outputMatrix = ds.ProcessMatrix(inputMatrix);
-                    DisplayMatrix(dataGridViewOut, outputMatrix);
-                    buttonSaveResult.Enabled = true;
+                    DisplayMatrix(LoadMatrixFromFile(openFileDialog.FileName), dataGridViewIn);
+
+                    DisplayMatrix(matrix, dataGridViewOut);
+
+                    MessageBox.Show("File loaded successfully", "Success",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void DisplayMatrix(DataGridView dgv, int[,] matrix)
-        {
-            dgv.Rows.Clear();
-            dgv.Columns.Clear();
-
-            int rows = matrix.GetLength(0);
-            int cols = matrix.GetLength(1);
-
-            for (int j = 0; j < cols; j++)
-            {
-                dgv.Columns.Add("col" + j, "Col " + (j + 1));
-                dgv.Columns[j].Width = 70;
-            }
-
-            for (int i = 0; i < rows; i++)
-            {
-                dgv.Rows.Add();
-                for (int j = 0; j < cols; j++)
+                catch (Exception ex)
                 {
-                    dgv.Rows[i].Cells[j].Value = matrix[i, j];
+                    MessageBox.Show($"Error: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void buttonSaveResult_Click(object sender, EventArgs e)
+        private void buttonSave_Click(object sender, EventArgs e)
         {
-            try
-            {
-                saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
-                saveFileDialog.FileName = "OutPutFileTask7.csv";
-                saveFileDialog.Title = "Save Result";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.FileName = "OutPutFileTask7.csv";
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
                 {
-                    string outputPath = saveFileDialog.FileName;
-                    ds.SaveMatrixToFile(outputMatrix, outputPath);
-                    MessageBox.Show("File saved: " + outputPath, "Success",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SaveMatrixToCSV(dataGridViewOut, saveFileDialog.FileName);
+                    MessageBox.Show("File saved successfully", "Success",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error",
+                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception ex)
+        }
+
+        private int[,] LoadMatrixFromFile(string path)
+        {
+            string[] lines = File.ReadAllLines(path);
+            int rowCount = lines.Length;
+            int colCount = lines[0].Split(';').Length;
+
+            int[,] matrix = new int[rowCount, colCount];
+
+            for (int i = 0; i < rowCount; i++)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string[] values = lines[i].Split(';');
+                for (int j = 0; j < colCount; j++)
+                {
+                    matrix[i, j] = int.Parse(values[j].Trim());
+                }
+            }
+
+            return matrix;
+        }
+
+        private void DisplayMatrix(int[,] matrix, DataGridView dgv)
+        {
+            int rowCount = matrix.GetLength(0);
+            int colCount = matrix.GetLength(1);
+
+            dgv.RowCount = rowCount;
+            dgv.ColumnCount = colCount;
+
+            for (int i = 0; i < colCount; i++)
+            {
+                dgv.Columns[i].Width = 50;
+            }
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                for (int j = 0; j < colCount; j++)
+                {
+                    dgv[j, i].Value = matrix[i, j];
+                }
             }
         }
 
-        private void buttonHelp_Click(object sender, EventArgs e)
+        private void SaveMatrixToCSV(DataGridView dgv, string filePath)
         {
-            MessageBox.Show("Task 7 Variant 4", "Help",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                for (int i = 0; i < dgv.RowCount; i++)
+                {
+                    string[] rowValues = new string[dgv.ColumnCount];
+                    for (int j = 0; j < dgv.ColumnCount; j++)
+                    {
+                        rowValues[j] = dgv[j, i].Value?.ToString() ?? "";
+                    }
+                    writer.WriteLine(string.Join(";", rowValues));
+                }
+            }
         }
-    }
 
-    internal class openFileDialog
-    {
-        public static string Title { get; internal set; }
-    }
-
-    internal class DataService
-    {
+        private void buttonDone_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
